@@ -33,11 +33,6 @@ public class PollingService {
 
         if(properties.length == 0)
             return false;
-
-        //Spring Debugger
-        for (Properties p : properties) {
-            log.info("id:" + p.getId() + ", nouvelle:"+p.getNouvelle()+", creator:"+p.getCreateur());
-        }
         return true;
     }
 }
