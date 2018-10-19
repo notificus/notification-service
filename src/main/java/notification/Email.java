@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 public class Email {
 
-    public static void sendEmail(String destination, String subject, String content ) {
+    public static boolean sendEmail(String destination, String subject, String content ) {
         final String fromEmail = "notificusUdes@gmail.com";
         final String password = "NotificusAdmin111";
 
@@ -30,9 +30,16 @@ public class Email {
             }
         };
         Session session = Session.getInstance(props, auth);
-        createEmail(session,subject,content, destination);
+        if(createEmail(session,subject,content, destination))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
-    private static void createEmail(Session session, String subject, String content, String destination) {
+    private static boolean createEmail(Session session, String subject, String content, String destination) {
         try {
             final String toEmail = destination;
 
@@ -56,7 +63,9 @@ public class Email {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
 
