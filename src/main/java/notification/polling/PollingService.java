@@ -14,12 +14,10 @@ import java.util.Date;
 @Service
 public class PollingService {
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class); //Console Debugger. It will show in spring console.
-
-    public URL setGetConfiguration(String msUrl) throws IOException{
+    public URL setGetConfiguration(String cip) throws IOException{
         String datePattern = "yyyy-MM-dd";
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-        URL jsonUrl = new URL(msUrl+dateFormat.format(new Date()));
+        URL jsonUrl = new URL("https://www.gel.usherbrooke.ca/app/api/nouvelles/?cip="+cip+"&date="+dateFormat.format(new Date()));
 
         return jsonUrl;
     }
@@ -27,8 +25,7 @@ public class PollingService {
     @Scheduled(cron = "0 0 0 0/24 * ?") //means each 24h.
     public boolean poll() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Notes[] properties = mapper.readValue( setGetConfiguration("https://www.gel.usherbrooke.ca/app/api/nouvelles/?cip=spip2401&date=")
-                                                    , Notes[].class);
+        Notes[] properties = mapper.readValue( setGetConfiguration("spip2401"), Notes[].class);
 
         if(properties.length == 0)
             return false;
