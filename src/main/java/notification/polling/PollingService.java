@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import notification.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
+=======
+>>>>>>> defined object recieve from note MS
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -28,8 +31,8 @@ public class PollingService {
     @Scheduled(cron = "0 0 0 0/24 * ?") //means each 24h.
     public boolean poll() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Properties[] properties = mapper.readValue( setGetConfiguration("https://www.gel.usherbrooke.ca/app/api/nouvelles/?cip=spip2401&date=")
-                                                    ,Properties[].class);
+        Notes[] properties = mapper.readValue( setGetConfiguration("https://www.gel.usherbrooke.ca/app/api/nouvelles/?cip=spip2401&date=")
+                                                    , Notes[].class);
 
         if(properties.length == 0)
             return false;
