@@ -29,7 +29,16 @@ public class PollingService {
 
         ObjectMapper mapper = new ObjectMapper();
         //TODO: add more user information to the setPollConfiguration.
-        Notes[] notes = mapper.readValue( setPollConfiguration("spip2401"), Notes[].class);
+        Notes[] notes;
+        try
+        {
+           notes = mapper.readValue(setPollConfiguration("spip2401"), Notes[].class);
+        }
+        catch(IOException e)
+        {
+            notes = new Notes[0];
+        }
+
 
         if(notes.length == 0)
             return false;
