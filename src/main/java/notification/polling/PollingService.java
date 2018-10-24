@@ -1,34 +1,42 @@
 package notification.polling;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import notification.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import notification.service.message.EmailMessageService;
 
 @Service
 public class PollingService {
 
-    public URL setGetConfiguration(String cip) throws IOException{
-        String datePattern = "yyyy-MM-dd";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-        URL jsonUrl = new URL("https://www.gel.usherbrooke.ca/app/api/nouvelles/?cip="+cip+"&date="+dateFormat.format(new Date()));
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+    public URL setPollConfiguration(String cip) throws IOException{
+        URL jsonUrl = new URL("https://www.gel.usherbrooke.ca/app/api/notes/?cip="+cip);
+        //TODO: add more url building features.
         return jsonUrl;
     }
 
-    @Scheduled(cron = "0 0 0 0/24 * ?") //means each 24h.
+    @Scheduled(initialDelay = 0, fixedRate = (3600000 * 24)) //means each 24h.
     public boolean poll() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Notes[] properties = mapper.readValue( setGetConfiguration("spip2401"), Notes[].class);
+        log.info("polling...");
 
-        if(properties.length == 0)
+        ObjectMapper mapper = new ObjectMapper();
+        //TODO: add more user information to the setPollConfiguration.
+        Notes[] notes = mapper.readValue( setPollConfiguration("spip2401"), Notes[].class);
+
+        if(notes.length == 0)
             return false;
+
+        EmailMessageService emailMessageService = new EmailMessageService();
+        emailMessageService.sendMessage("notificusUdes@gmail.com","New note have been added to your file", "This is to inform you that in your file!");
+        log.info("sent email.");
         return true;
     }
 }
