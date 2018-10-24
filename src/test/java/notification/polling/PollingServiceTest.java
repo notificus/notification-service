@@ -17,18 +17,17 @@ import java.io.IOException;
 public class PollingServiceTest {
 
     @Autowired
-    PollingService pollingService;
+    PollingService pollingService = new PollingService();
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
     @InjectMocks
-    private Notes[] notes;
+    private Notes[] notes = new Notes[0];
 
     @Test
     public void testPollingScheduler_ReturnFail() throws IOException {
-
         objectMapper = Mockito.mock(ObjectMapper.class);
-        when(objectMapper.readValue(eq(""),Notes[].class)).thenReturn(new Notes[0]);
+        when(objectMapper.readValue(anyString(),eq(Notes[].class))).thenReturn(new Notes[0]);
         boolean success = pollingService.poll();
         Assert.assertEquals(false, success);
     }
@@ -36,7 +35,7 @@ public class PollingServiceTest {
     @Test
     public void testPollingScheduler_ReturnSuccess() throws IOException{
         objectMapper = Mockito.mock(ObjectMapper.class);
-        when(objectMapper.readValue(eq(""),Notes[].class)).thenReturn(notes);
+        Mockito.when(objectMapper.readValue(anyString(),eq(Notes[].class))).thenReturn(notes);
         boolean success = pollingService.poll();
         Assert.assertFalse(success);
     }

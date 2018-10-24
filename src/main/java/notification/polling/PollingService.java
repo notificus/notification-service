@@ -29,7 +29,7 @@ public class PollingService {
 
     @Scheduled(initialDelay = 0, fixedRate = (3600000 * 24)) //means each 24h.
     public boolean poll() throws IOException {
-        log.info("polling...");
+        //log.info("polling...");
 
         objectMapper = new ObjectMapper();
         //TODO: add more user information to the setPollConfiguration.
@@ -49,7 +49,7 @@ public class PollingService {
 
         EmailMessageService emailMessageService = new EmailMessageService();
         emailMessageService.sendMessage("notificusUdes@gmail.com","New note have been added to your file", "This is to inform you that in your file!");
-        log.info("sent email.");
+        //log.info("sent email.");
         return true;
     }
 }
