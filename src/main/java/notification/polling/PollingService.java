@@ -4,10 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import notification.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<<<<<<< HEAD
-import org.springframework.beans.factory.annotation.Autowired;
-=======
->>>>>>> defined object recieve from note MS
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
