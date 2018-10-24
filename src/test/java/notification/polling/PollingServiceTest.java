@@ -1,10 +1,15 @@
 package notification.polling;
 
-import notification.polling.PollingSerive;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+import org.mockito.InjectMocks;
 
 import java.io.IOException;
 
@@ -14,15 +19,25 @@ public class PollingServiceTest {
     @Autowired
     PollingService pollingService;
 
-    @Test
-    public void testSuccessPollingScheduler() throws IOException {
+    @Mock
+    private ObjectMapper objectMapper;
+    @InjectMocks
+    private Notes[] notes;
 
+    @Test
+    public void testPollingScheduler_ReturnFail() throws IOException {
+
+        objectMapper = Mockito.mock(ObjectMapper.class);
+        when(objectMapper.readValue(eq(""),Notes[].class)).thenReturn(new Notes[0]);
         boolean success = pollingService.poll();
-        Assert.assertEquals(true,success);
+        Assert.assertEquals(false, success);
     }
 
-    public void testFailurePollingScheduler() throws IOException{
+    @Test
+    public void testPollingScheduler_ReturnSuccess() throws IOException{
+        objectMapper = Mockito.mock(ObjectMapper.class);
+        when(objectMapper.readValue(eq(""),Notes[].class)).thenReturn(notes);
         boolean success = pollingService.poll();
-        Assert.assertEquals(false,success);
+        Assert.assertFalse(success);
     }
 }

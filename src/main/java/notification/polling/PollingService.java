@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -17,6 +18,9 @@ public class PollingService {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public URL setPollConfiguration(String cip) throws IOException{
         URL jsonUrl = new URL("https://www.gel.usherbrooke.ca/app/api/notes/?cip="+cip);
         //TODO: add more url building features.
@@ -27,12 +31,12 @@ public class PollingService {
     public boolean poll() throws IOException {
         log.info("polling...");
 
-        ObjectMapper mapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         //TODO: add more user information to the setPollConfiguration.
         Notes[] notes;
         try
         {
-           notes = mapper.readValue(setPollConfiguration("spip2401"), Notes[].class);
+           notes = objectMapper.readValue(setPollConfiguration("spip2401"), Notes[].class);
         }
         catch(IOException e)
         {
