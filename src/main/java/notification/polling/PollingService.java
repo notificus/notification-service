@@ -16,10 +16,8 @@ import notification.service.message.EmailMessageService;
 @Service
 public class PollingService {
 
+    public ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger log = LoggerFactory.getLogger(Application.class);
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     public URL setPollConfiguration(String cip) throws IOException{
         URL jsonUrl = new URL("https://www.gel.usherbrooke.ca/app/api/notes/?cip="+cip);
@@ -31,18 +29,8 @@ public class PollingService {
     public boolean poll() throws IOException {
         //log.info("polling...");
 
-        objectMapper = new ObjectMapper();
         //TODO: add more user information to the setPollConfiguration.
-        Notes[] notes;
-        try
-        {
-           notes = objectMapper.readValue(setPollConfiguration("spip2401"), Notes[].class);
-        }
-        catch(IOException e)
-        {
-            notes = new Notes[0];
-        }
-
+        Notes[] notes = requestJsonFromURL(setPollConfiguration("spip2401"));
 
         if(notes.length == 0)
             return false;
@@ -51,6 +39,19 @@ public class PollingService {
         emailMessageService.sendMessage("notificusUdes@gmail.com","New note have been added to your file", "This is to inform you that in your file!");
         //log.info("sent email.");
         return true;
+    }
+
+    Notes[] requestJsonFromURL(URL url){
+        Notes[] notes;
+        try
+        {
+            notes = objectMapper.readValue(setPollConfiguration("spip2401"), Notes[].class);
+        }
+        catch(IOException e)
+        {
+            return new Notes[0];
+        }
+        return notes;
     }
 }
 
