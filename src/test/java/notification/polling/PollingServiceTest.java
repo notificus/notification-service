@@ -35,7 +35,7 @@ public class PollingServiceTest {
     public void testPollingScheduler_ReturnFail() throws IOException {
         PollingService mockPoll = Mockito.spy(new PollingService());
         Mockito.when(mockPoll.requestJsonFromURL(any(URL.class))).thenReturn(new Notes[0]);
-        boolean success = mockPoll.poll();
+        boolean success = mockPoll.poll("email");
         Assert.assertFalse(success);
     }
 
@@ -43,7 +43,7 @@ public class PollingServiceTest {
     public void testPollingScheduler_ReturnSuccess() throws IOException{
         PollingService mockPoll = Mockito.spy(new PollingService());
         Mockito.when(mockPoll.requestJsonFromURL(any(URL.class))).thenReturn(notes);
-        boolean success = mockPoll.poll();
+        boolean success = mockPoll.poll("email");
         Assert.assertTrue(success);
     }
 }

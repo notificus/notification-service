@@ -10,7 +10,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URL;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import notification.service.message.EmailMessageService;
 
 @Service
@@ -24,9 +27,10 @@ public class PollingService {
         //TODO: add more url building features.
         return jsonUrl;
     }
-
+    @RequestMapping(value = "/user/cip/configurations", method = RequestMethod.GET)
+    @ResponseBody
     @Scheduled(initialDelay = 0, fixedRate = (3600000 * 24)) //means each 24h.
-    public boolean poll() throws IOException {
+    public boolean poll(@RequestParam("email") String email) throws IOException {
         //log.info("polling...");
 
         //TODO: add more user information to the setPollConfiguration.
@@ -36,7 +40,7 @@ public class PollingService {
             return false;
 
         EmailMessageService emailMessageService = new EmailMessageService();
-        emailMessageService.sendMessage("notificusUdes@gmail.com","New note have been added to your file", "This is to inform you that in your file!");
+        emailMessageService.sendMessage(email,"New note have been added to your file", "This is to inform you that in your file!");
         //log.info("sent email.");
         return true;
     }
