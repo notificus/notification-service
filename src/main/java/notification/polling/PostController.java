@@ -6,13 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-public class PullController {
-
+public class PostController {
     @PostMapping("/notes")
      public boolean updateNote(@RequestBody Notes newNote) {
         EmailMessageService emailMessageService = new EmailMessageService();
-        emailMessageService.sendMessage("notificusUdes@gmail.com",newNote.getNoteType(), newNote.getCip()+"\n"+
-                                        newNote.getNoteType()+"\n"+newNote.getCompetence());
+        emailMessageService.sendMessage(newNote.getCip()+"@gmail.com",newNote.getClassSigil(), "Une nouvelle note pour " + newNote.getClassSigil() + " est disponible.");
         return true;
     }
 }

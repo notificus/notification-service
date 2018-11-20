@@ -26,8 +26,6 @@ public class PollingServiceTest {
         Notes note = new Notes();
         note.setCip("spip2401");
         note.setClassSigil("GIF600");
-        note.setCompetence("3");
-        note.setNoteType("exam");
         notes[0] = note;
     }
 
@@ -35,7 +33,7 @@ public class PollingServiceTest {
     public void testPollingScheduler_ReturnFail() throws IOException {
         PollingService mockPoll = Mockito.spy(new PollingService());
         Mockito.when(mockPoll.requestJsonFromURL(any(URL.class))).thenReturn(new Notes[0]);
-        boolean success = mockPoll.poll("email");
+        boolean success = mockPoll.poll();
         Assert.assertFalse(success);
     }
 
@@ -43,7 +41,7 @@ public class PollingServiceTest {
     public void testPollingScheduler_ReturnSuccess() throws IOException{
         PollingService mockPoll = Mockito.spy(new PollingService());
         Mockito.when(mockPoll.requestJsonFromURL(any(URL.class))).thenReturn(notes);
-        boolean success = mockPoll.poll("email");
+        boolean success = mockPoll.poll();
         Assert.assertTrue(success);
     }
 }
