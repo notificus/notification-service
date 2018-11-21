@@ -4,6 +4,10 @@
     "course" : "GIF600"
   },
   {
+    "cip": "12345",
+    "course": "badCourse"
+  },
+  {
     "cip": "garp2405",
     "course": "GIF600"
   },
