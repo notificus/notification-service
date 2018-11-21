@@ -82,7 +82,8 @@ public class PollingService {
                 JSONParser parser = new JSONParser();
                 JSONObject jsonRequest = (JSONObject) parser.parse(result.toString());
                 JSONArray emails = (JSONArray)jsonRequest.get("emails");
-                emailMessageService.sendMessage(emails.get(0).toString(), notes[i].getClassSigil(), "Une nouvelle note pour " + notes[i].getClassSigil() + " est disponible.");
+                for(int y =0; y < emails.size(); y++)
+                    emailMessageService.sendMessage(emails.get(y).toString(), notes[i].getClassSigil(), "Une nouvelle note pour " + notes[i].getClassSigil() + " est disponible.");
             }
 
             catch(IOException e) {
