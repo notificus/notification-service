@@ -1,0 +1,26 @@
+[
+  {
+    "cip": "fonj1903",
+    "course" : "GIF600"
+  },
+  {
+    "cip": "12345",
+    "course": "badCourse"
+  },
+  {
+    "cip": "garp2405",
+    "course": "GIF600"
+  },
+  {
+    "cip": "bosa2002",
+    "course": "GIF570"
+  },
+  {
+    "cip": "beae2211",
+    "course": "GIFBONJOUR"
+  },
+  {
+    "cip": "spip2401",
+    "course": "GIF100"
+  }
+]
