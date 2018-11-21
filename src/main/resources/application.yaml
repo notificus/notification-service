@@ -1,0 +1,23 @@
+spring:
+  profiles: default
+
+server:
+  port: 8082
+  use-forward-headers: true
+
+configuration-service:
+  url: "http://localhost"
+  port: 8081
+
+---
+
+spring:
+  profiles: prod
+
+server:
+  port: 9999
+  use-forward-headers: true
+
+configuration-service:
+  url: "http://configuration-service"
+  port: 7777

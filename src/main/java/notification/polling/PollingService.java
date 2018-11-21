@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -21,8 +22,15 @@ import com.google.gson.*;
 import java.net.*;
 import java.io.*;
 
+import static java.lang.String.format;
+
 @Service
 public class PollingService {
+    @Value("${configuration-service.url}")
+    private String configurationServiceUrl;
+
+    @Value("${configuration-service.port}")
+    private String configurationServicePort;
 
     public ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -70,7 +78,7 @@ public class PollingService {
 
             try {
                 StringBuilder result = new StringBuilder();
-                URL url = new URL("http://localhost:8080/users/"+notes[i].getCip()+"/configurations");
+                URL url = new URL(format("%s:%s/users/" + notes[i].getCip() + "/configurations", configurationServiceUrl, configurationServicePort));
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
