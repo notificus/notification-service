@@ -1,10 +1,22 @@
 [
   {
     "cip": "fonj1903",
-    "classSigil" : "GIF600"
+    "course" : "GIF600"
   },
   {
     "cip": "garp2405",
-    "classSigil": "GIF600"
+    "course": "GIF600"
+  },
+  {
+    "cip": "bosa2002",
+    "course": "GIF570"
+  },
+  {
+    "cip": "beae2211",
+    "course": "GIFBONJOUR"
+  },
+  {
+    "cip": "spip2401",
+    "course": "GIF100"
   }
 ]

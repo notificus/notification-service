@@ -9,6 +9,8 @@ configuration-service:
   url: "http://localhost"
   port: 8081
 
+test-data: "test.json"
+
 ---
 
 spring:
@@ -21,3 +23,5 @@ server:
 configuration-service:
   url: "http://configuration-service"
   port: 7777
+
+test-data: "/opt/notification-service/lib/test.json"
