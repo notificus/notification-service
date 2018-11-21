@@ -26,8 +26,6 @@ public class PollingServiceTest {
         Notes note = new Notes();
         note.setCip("spip2401");
         note.setClassSigil("GIF600");
-        note.setCompetence("3");
-        note.setNoteType("exam");
         notes[0] = note;
     }
 

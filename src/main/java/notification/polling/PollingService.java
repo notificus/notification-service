@@ -5,13 +5,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URL;
 
 import notification.service.message.EmailMessageService;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import com.google.gson.*;
+import java.net.*;
+import java.io.*;
 
 @Service
 public class PollingService {
@@ -25,19 +33,65 @@ public class PollingService {
         return jsonUrl;
     }
 
+    public JSONArray getJSonArray()
+    {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONArray a = (JSONArray) parser.parse(new FileReader("test.json"));
+            return a;
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch(ParseException e) {
+            e.printStackTrace();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     @Scheduled(initialDelay = 0, fixedRate = (3600000 * 24)) //means each 24h.
-    public boolean poll() throws IOException {
+    public boolean poll(){
         //log.info("polling...");
 
         //TODO: add more user information to the setPollConfiguration.
-        Notes[] notes = requestJsonFromURL(setPollConfiguration("spip2401"));
+
+        JSONArray a = getJSonArray();
+        Gson gson = new Gson();
+
+        Notes[] notes = gson.fromJson(a.toString(), Notes[].class);
 
         if(notes.length == 0)
             return false;
 
         EmailMessageService emailMessageService = new EmailMessageService();
-        emailMessageService.sendMessage("notificusUdes@gmail.com","New note have been added to your file", "This is to inform you that in your file!");
-        //log.info("sent email.");
+        for(int i =0; i < notes.length; i++) {
+
+            try {
+                StringBuilder result = new StringBuilder();
+                URL url = new URL("http://localhost:8080/users/"+notes[i].getCip()+"/configurations");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    result.append(line);
+                }
+                rd.close();
+                JSONParser parser = new JSONParser();
+                JSONObject jsonRequest = (JSONObject) parser.parse(result.toString());
+                JSONArray emails = (JSONArray)jsonRequest.get("emails");
+                emailMessageService.sendMessage(emails.get(0).toString(), notes[i].getClassSigil(), "Une nouvelle note pour " + notes[i].getClassSigil() + " est disponible.");
+            }
+
+            catch(IOException e) {
+                e.printStackTrace();
+            }
+            catch(ParseException e) {
+                e.printStackTrace();
+            }
+        }
         return true;
     }
 
