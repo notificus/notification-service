@@ -12,7 +12,10 @@ RUN gradle build
 #
 FROM openjdk:10-jre-slim
 ARG JAR_FILE=build/libs/notification-service-1.0.jar
+ARG JSON_TEST_FILE=test.json
+
 COPY --from=builder /home/gradle/src/${JAR_FILE} ./notification-service.jar
+ADD ${JSON_TEST_FILE} ./test.json
 
 # Run the entrypoint bash file
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/notification-service.jar"]
