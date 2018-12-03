@@ -24,4 +24,4 @@ configuration-service:
   url: "http://configuration-service"
   port: 7777
 
-test-data: "/opt/notification-service/lib/test.json"
+test-data: "test.json"
