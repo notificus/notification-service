@@ -1,8 +1,7 @@
-pool:
-  vmImage: 'Ubuntu 16.04'
-
-steps:
-- script: docker build -t notificus/notification-service . # include other options to meet your needs
-- script: |
-    docker login -u notificus -p c2Mwk-Mc
-    docker push notificus/notification-service
+jobs:
+- job: Build
+  steps:
+  - script: docker build -t notificus/notification-service .
+    condition: always()
+  - script: docker login -u notificus -p c2Mwk-Mc && docker push notificus/notification-service
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
